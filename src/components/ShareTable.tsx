@@ -1,94 +1,12 @@
-import Axios from "axios";
 import React, { useState, useRef } from "react";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  FlatList,
-  View,
-  AsyncStorage,
-} from "react-native";
+import { ScrollView, Text, StyleSheet, FlatList, View } from "react-native";
 import { DataTable } from "react-native-paper";
 import { QueryCache, useQuery, setConsole } from "react-query";
 import BottomSheet from "reanimated-bottom-sheet";
 import { Dimensions } from "react-native";
-// import { LineChart } from "react-native-chart-kit";
-import Chart from "../components/Chart";
 import { AntDesign } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
-import { addShare } from "../redux/share/shareAction";
 
-export default function Home() {
-  const dispatch = useDispatch();
-
-  const screenWidth = Dimensions.get("window").width;
-  // const chartConfig = {
-  //   backgroundGradientFrom: "#1E2923",
-  //   backgroundGradientTo: "#08130D",
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  // };
-  // const chartData = {
-  //   labels: ["January", "February", "March", "April", "May", "June"],
-  //   datasets: [
-  //     {
-  //       data: [20, 45, 28, 80, 99, 43],
-  //     },
-  //   ],
-  // };
-
-  const sheetRef = useRef(null);
-  const [share, setShare] = useState({});
-
-  // const queryCache = new QueryCache();
-  const { isLoading, error, data } = useQuery("shareData", () =>
-    Axios.get("http://nepstockapi.herokuapp.com/")
-  );
-  AsyncStorage.setItem("shareData", data);
-
-  // setConsole({
-  //   log: console.log,
-  //   warn: console.warn,
-  //   error: console.warn,
-  // });s
-
-  if (isLoading) return <Text>Loading...</Text>;
-
-  if (error) return <Text>{error.message}</Text>;
-
-  const renderContent = () => (
-    <View
-      style={
-        (styles.header,
-        {
-          paddingTop: 10,
-          backgroundColor: "white",
-          height: 750,
-        })
-      }
-    >
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle} />
-      </View>
-      <View>
-        <Text>{share.Symbol}</Text>
-
-        {/* <LineChart
-          data={chartData}
-          width={screenWidth}
-          height={220}
-          chartConfig={chartConfig}
-        /> */}
-
-        {/* <Chart /> */}
-        <View style={{ height: 80, width: "90%" }}>
-          <Text>{share.High}</Text>
-
-          <Text>{share.Low}</Text>
-        </View>
-      </View>
-    </View>
-  );
-
+export default function ShareTable({ data }) {
   return (
     <>
       <ScrollView>
@@ -112,11 +30,10 @@ export default function Home() {
                     backgroundColor: item.Diff > 0 ? "green" : "red",
                     color: "white",
                   }}
-                  onPress={() => {
-                    sheetRef.current.snapTo(0);
-                    setShare(item);
-                    dispatch(addShare(item));
-                  }}
+                  //   onPress={() => {
+                  //     sheetRef.current.snapTo(0);
+                  //     setShare(item);
+                  //   }}
                 >
                   <DataTable.Cell>{item["S.No"]}</DataTable.Cell>
                   <DataTable.Cell>{item.Symbol}</DataTable.Cell>
@@ -147,6 +64,7 @@ export default function Home() {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
